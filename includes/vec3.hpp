@@ -17,7 +17,7 @@ namespace ssao_render{
 
             vec3 operator-() const { return vec3(-e_[0], -e_[1], -e_[2]); }
             float operator[](int i) const { return e_[i]; }
-            float &opertator[](int i) { return e_[i]; }
+            float &operator[](int i) { return e_[i]; }
 
             vec3 &operator+=(const vec3 &v) 
             {
@@ -37,32 +37,33 @@ namespace ssao_render{
 
             vec3 &operator/=(float t) { return *this *= 1/t; }
             
-            float vec3_length() const { return std::sqrt(lenth_squared()); }
-            float vec3_length_squared() const { return e_[0]*e_[0] + e_[1]*e_[1] + e_[2]*e_[2]; }
+            float vec3_length_squared() const { return e_[0]*e_[0] + e_[1]*e_[1] + e_[2]*e_[2]; }           
+            float vec3_length() const { return std::sqrt(vec3_length_squared()); }
+           
     };
 
-    inline std::ostrean &operator<<(std::ostream &out, const vec3 &v)
+    inline std::ostream &operator<<(std::ostream &out, const vec3 &v)
     {
-        return out << v.e_[0] << ' ' << v.e_[1] << ' ' << v.e_[2];
+        return out << v.x() << ' ' << v.y() << ' ' << v.z();
     }
 
     inline vec3 operator+(const vec3 &u, const vec3 &v)
     {
-        return vec3(u.e_[0] + v.e_[0], u.e_[1] + v.e_[1], u.e_[2] + v.e_[2]);
+        return vec3(u.x() + v.x(), u.y() + v.y(), u.z() + v.z());
     }
 
     inline vec3 operator-(const vec3 &u, const vec3 &v)
     {
-        return vec3(u.e_[0] - v.e_[0], u.e_[1] - v.e_[1], u.e_[2] - v.e_[2]);
+        return vec3(u.x() - v.x(), u.y() - v.y(), u.z() - v.z());
     }
 
     inline vec3 operator*(const vec3 &u, const vec3 &v)
     {
-        return vec3(u.e_[0] * v.e_[0], u.e_[1] * v.e_[1], u.e_[2] * v.e_[2]);
+        return vec3(u.x() * v.x(), u.y() * v.y(), u.z() * v.z());
     }
     inline vec3 operator*(float t, const vec3 &v) 
     {
-        return vec3(t*v.e_[0], t*v.e_[1], t*v.e_[2]);
+        return vec3(t*v.x(), t*v.y(), t*v.z());
     }
     inline vec3 operator*(const vec3 &u, float t) { return t * u; }
 
@@ -70,17 +71,17 @@ namespace ssao_render{
 
     inline float vec3_dot(const vec3 &u, const vec3 &v) 
     {
-        return u.e_[0] * v.e_[0] 
-             + u.e_[1] * v.e_[1] 
-             + u.e_[2] * v.e_[2];    
+        return u.x() * v.x() 
+             + u.y() * v.y() 
+             + u.z() * v.z();    
     }
 
     inline vec3 vec3_cross(const vec3 &u, const vec3 &v) 
     {
-        return vec3(u.e_[1] * v.e_[2] - u.e_[2] * v.e_[1],
-                    u.e_[2] * v.e_[0] - u.e_[0] * v.e_[2],
-                    u.e_[0] * v.e_[1] - u.e_[1] * v.e_[0]);
+        return vec3(u.y() * v.z() - u.z() * v.y(),
+                    u.z() * v.x() - u.x() * v.z(),
+                    u.x() * v.y() - u.y() * v.z());
     }
 
-    inline vec3 vec3_unit_vector(const vec3& u) { return u / u.length(); }
+    inline vec3 vec3_unit_vector(const vec3& u) { return u / u.vec3_length(); }
 }
